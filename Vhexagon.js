@@ -1,3 +1,5 @@
+// Hex math defined here: http://blog.ruslans.com/2011/02/hexagonal-grid-math.html
+
 function HexagonGrid(canvasId, radius, isVerticle) {
     this.radius = radius;
 
@@ -22,7 +24,7 @@ function HexagonGrid(canvasId, radius, isVerticle) {
     }
     
     
-    this.note = -60; // default begin note
+    this.note = 0; // default begin note have to number of times of 12
     this.octave = Math.floor(this.note / 12);
     this.bias = 0;  // default bias for setting tonic
     this.A = 2;
@@ -53,6 +55,9 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
     var C = this.C;
     
     note %= 12;
+//    if(A<0)
+//        note-=12;
+    
     var ocv = this.octave;
     
    if(this.isHorizontal === true)
@@ -93,22 +98,39 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
                     currentHexY = (row * (this.height + this.radius) * 0.5) + originY;
                 }
                 if (isDebug) {
-                    debugText = col + "," + row;
+//                    debugText = col + "," + row;
+                    debugText = note + "," + octave;
 //                    debugText ="N"+":"+note + " " +"O"+":"+ octave;
                 }
                 
-                if(octave>=0 && octave<9)
+//                if(octave>=0 && octave<9)
+                if(octave>0 && octave<9)
                 this.drawHexHorizontal(currentHexX, currentHexY, "#ddd", debugText, bias, note);
-                
+
+            if(A>0)
+            {                
             var oldNoteA = note; 
                 note += A;
             var newNoteA = note;
-                
                 if(note >= 12&&(newNoteA-oldNoteA)>0)
                     octave++;
                 else if(note < 0&&(newNoteA-oldNoteA)<0)
                     octave--;
-                    
+            }
+            else if(A<0)
+            {
+
+            var oldNoteA = note; 
+                note += A;
+            var newNoteA = note;                
+                
+                    if(oldNoteA >= 0 && newNoteA < 0)
+                    octave--;
+                
+                    if(note < -12 &&(newNoteA-oldNoteA)<0)
+                    octave--;             
+            }                
+                
                 note %= 12;
             }
             offsetColumn = !offsetColumn;
@@ -116,26 +138,56 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
             octave = ocv;
             if(!offsetColumn)
             {
- 
+                var oldNoteB = note;
                 note += B;
+                var newNoteB = note;
+                if(A>=0)
+                {
                 if(note >= 12)
                     octave++;
                 else if(note < 0)
                     octave--;
+                }
+                else // A<0
+                {
+                    if(oldNoteB>=0 && newNoteB<0)
+                        octave--;
+                    if(oldNoteB<0 && newNoteB>=0)
+                        octave++;
+                    if(oldNoteB<12 && newNoteB>=12)
+                        octave++;  
+                }
+                
                 note %= 12;
+                
                 if(note<0)
                     note = 12+note;
             }
             else
-            {
+            {   
+                var oldNoteC = note;
+                    note += C;
+                var newNoteC = note;
                 
-                note += C;
+                if(A >=0)
+                {
                 if(note >= 12)
                     octave++;
                 else if(note < 0)
                     octave--;
+                }
+                else
+                {
+                    if(oldNoteC>=0 && newNoteC<0)
+                        octave--;
+                    if(oldNoteC<0 && newNoteC>=0)
+                        octave++;
+                    if(oldNoteC<12 && newNoteC>=12)
+                        octave++;                   
+
+                }
                 note %= 12;
-                 if(note<0)
+                if(note<0)
                     note = 12+note;
             }
             ocv = octave;
@@ -217,6 +269,7 @@ HexagonGrid.prototype.drawHexHorizontal = function(x0, y0, fillColor, debugText,
 
 function Wicki()
 {   
+//    this.note = 60; //size 15-20
     this.A = 2;
     this.B = -7;
     this.C = -5;
@@ -224,6 +277,7 @@ function Wicki()
 
 function Janko()
 {   
+//    this.note = 12;
     this.A = 2;
     this.B = -1;
     this.C = 1;
@@ -238,6 +292,7 @@ function Harmonic()
 
 function Gerhard()
 {   
+//    this.note = -60; //size 15-20;
     this.A = 4;
     this.B = -1;
     this.C = 3;
@@ -248,6 +303,13 @@ function Park()
     this.A = 5;
     this.B = -3;
     this.C = 2;
+};
+
+function Bajan()
+{   
+    this.A = 3;
+    this.B = -2;
+    this.C = 1;
 };
 
 function C_system()
@@ -262,13 +324,6 @@ function B_system()
     this.A = -3;
     this.B = 1;
     this.C = -2;
-};
-
-function Bajan()
-{   
-    this.A = 3;
-    this.B = -2;
-    this.C = 1;
 };
 
 function Other(left, right, note, bias)
