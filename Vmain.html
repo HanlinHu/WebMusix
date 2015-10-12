@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+   
+    </style>
+    
+    <script src="Vhexagon.js"></script>
+</head>
+<body>
+   <canvas id="Hexa" width="1250" height="650" ></canvas>
+   <script>
+       
+       Wicki.prototype = new HexagonGrid("Hexa", 20, false);
+       Janko.prototype = new HexagonGrid("Hexa", 20, false);
+       Harmonic.prototype = new HexagonGrid("Hexa", 20, false);
+       Gerhard.prototype = new HexagonGrid("Hexa", 20, false);
+       Park.prototype = new HexagonGrid("Hexa", 20, false);
+       Bajan.prototype = new HexagonGrid("Hexa", 20, false);
+       B_system.prototype = new HexagonGrid("Hexa",20, false);
+       C_system.prototype = new HexagonGrid("Hexa", 20, false);
+       
+       
+       var myKeyboard = new Park();
+
+   myKeyboard.drawHexGrid(50, 48, 30, 30, true);       
+       
+    </script>
+</body>
+</html>
