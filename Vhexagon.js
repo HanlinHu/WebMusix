@@ -55,8 +55,6 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
     var C = this.C;
     
     note %= 12;
-//    if(A<0)
-//        note-=12;
     
     var ocv = this.octave;
     
@@ -103,7 +101,6 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 //                    debugText ="N"+":"+note + " " +"O"+":"+ octave;
                 }
                 
-//                if(octave>=0 && octave<9)
                 if(octave>0 && octave<9)
                 this.drawHexHorizontal(currentHexX, currentHexY, "#ddd", debugText, bias, note);
 
