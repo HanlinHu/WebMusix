@@ -11,20 +11,41 @@
 <body>
    <canvas id="Hexa" width="1250" height="650" ></canvas>
    <script>
+//       var hexagonGrid = new HexagonGrid("Hexa", 40, false);
+//       hexagonGrid.drawHexGrid(20, 48, -115, -105, true);
+//    Janko.prototype = new HexagonGrid("Hexa", 5, false);
        
-       Wicki.prototype = new HexagonGrid("Hexa", 20, false);
-       Janko.prototype = new HexagonGrid("Hexa", 20, false);
-       Harmonic.prototype = new HexagonGrid("Hexa", 20, false);
-       Gerhard.prototype = new HexagonGrid("Hexa", 20, false);
-       Park.prototype = new HexagonGrid("Hexa", 20, false);
-       Bajan.prototype = new HexagonGrid("Hexa", 20, false);
-       B_system.prototype = new HexagonGrid("Hexa",20, false);
-       C_system.prototype = new HexagonGrid("Hexa", 20, false);
-       
-       
-       var myKeyboard = new Park();
+//       var myJanko = new Janko();
+//myJanko.drawHexGrid(20, 48, -115, -105, true);
+//   myJanko.drawHexGrid(50, 48, 30, 30, true);      
 
-   myKeyboard.drawHexGrid(50, 48, 30, 30, true);       
+       
+//       Wicki.prototype = new HexagonGrid("Hexa", 20, false);
+//       Janko.prototype = new HexagonGrid("Hexa", 20, false);
+//       Harmonic.prototype = new HexagonGrid("Hexa", 20, false);
+//       Gerhard.prototype = new HexagonGrid("Hexa", 20, false);
+//       Park.prototype = new HexagonGrid("Hexa", 20, false);
+//       Bajan.prototype = new HexagonGrid("Hexa", 20, false);
+//       B_system.prototype = new HexagonGrid("Hexa",20, false);
+//       C_system.prototype = new HexagonGrid("Hexa", 20, false);
+//       
+//       Other.prototype = new HexagonGrid("Hexa", 20, false);
+       
+       
+       Wicki.prototype = new HexagonGrid("Hexa", 20, true);
+       Janko.prototype = new HexagonGrid("Hexa", 20, true);
+       Harmonic.prototype = new HexagonGrid("Hexa", 20, true);
+       Gerhard.prototype = new HexagonGrid("Hexa", 20, true);
+       Park.prototype = new HexagonGrid("Hexa", 20, true);
+       Bajan.prototype = new HexagonGrid("Hexa", 20, true);
+       B_system.prototype = new HexagonGrid("Hexa",20, true);
+       C_system.prototype = new HexagonGrid("Hexa", 20, true);
+       
+       var myKeyboard = new B_system();
+ //      var myKeyboard = new Other(-3, -4, 96, 0);
+       
+//myJanko.drawHexGrid(48, 48, -115, -105, true);
+   myKeyboard.drawHexGrid(48, 48, 30, 30, true);       
        
     </script>
 </body>
