@@ -22,9 +22,8 @@ function HexagonGrid(canvasId, radius, isVerticle) {
         this.width = Math.sqrt(3)*radius;
         this.side = (Math.sqrt(3)/2)*radius;
     }
-    
 
-    this.note = 96; // default begin note have to number of times of 12
+    this.note = 0; // default begin note have to number of times of 12
     this.octave = Math.floor(this.note / 12);
     this.bias = 0;  // default bias for setting tonic
     this.A = 2;
@@ -34,7 +33,7 @@ function HexagonGrid(canvasId, radius, isVerticle) {
 
 
 // Draw hexagonal grid in horizontal direction
-HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
+HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug, isFlat) {
     this.canvasOriginX = originX;
     this.canvasOriginY = originY;
     
@@ -42,13 +41,14 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
     var currentHexY;
     var debugText = "";
     
-    var offsetColumn = false;
+    var offset = false;
     
     var octave = this.octave; // 
     
     var note = this.note;
     var bias = this.bias;
     
+    var isFlat = isFlat;
     
     var A = this.A;
     var B = this.B;
@@ -58,6 +58,49 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
     
     var ocv = this.octave;
     
+    var flatForNumber = {
+    0: "C",
+    1: "Db",
+    2: "D",
+    3: "Eb",
+    4: "E",
+    5: "F",
+    6: "Gb",
+    7: "G",
+    8: "Ab",
+    9: "A",
+    10: "Bb",
+    11: "B"
+    };
+
+    var sharpForNumber = {
+    0: "C",
+    1: "C#",
+    2: "D",
+    3: "D#",
+    4: "E",
+    5: "F",
+    6: "F#",
+    7: "G",
+    8: "G#",
+    9: "A",
+    10: "A#",
+    11: "B"
+    };
+    
+    var getFlat = function (propertyName)
+    {
+        return flatForNumber[propertyName];
+    };
+    
+    var getSharp = function (propertyName) 
+    {
+        return sharpForNumber[propertyName];
+    };
+    
+    var printNote;
+    var noteToChar;
+    
    if(this.isVerticle === true)
        // verticle direction
    {
@@ -65,7 +108,7 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
         {
             for (var row = 0; row < rows; row++) {
 
-                if (!offsetColumn) {
+                if (!offset) {
                     currentHexX = (col * this.side) + originX;
                     currentHexY = (row * this.height) + originY;
                 } else {
@@ -74,7 +117,19 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
                 }
                 if (isDebug) {
 //                    debugText = col + "," + row;
-                   debugText = note + "," + octave;
+//                   debugText = note + "," + octave;
+                    if(note<0)
+                        printNote = note + 12;
+                    else
+                        printNote = note;
+                    
+                    if(isFlat === true)
+                        noteToChar = getFlat(printNote);
+                    else
+                        noteToChar = getSharp(printNote);
+                    
+                    debugText = noteToChar + octave;
+                    
                 }
                 if(octave>0 && octave<9)
                 this.drawHexVerticle(currentHexX, currentHexY, "#ddd", debugText, bias, note);
@@ -104,9 +159,9 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
                 
                 note %= 12;
             }
-            offsetColumn = !offsetColumn;
+            offset = !offset;
             octave = ocv;
-            if(!offsetColumn)
+            if(!offset)
             {
                 var oldNoteA = note;
                 note += A;
@@ -173,7 +228,7 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 
             //    (96/Math.abs(this.A))    cols
                 
-                if (!offsetColumn) {
+                if (!offset) {
                     currentHexX = (col * this.width) + originX;
                     currentHexY = (row * (this.height + this.radius) * 0.5) + originY;
                 } else {
@@ -182,8 +237,20 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
                 }
                 if (isDebug) {
 //                    debugText = col + "," + row;
-                    debugText = note + "," + octave;
+//                    debugText = note + "," + octave;
 //                    debugText ="N"+":"+note + " " +"O"+":"+ octave;
+                    if(note<0)
+                        printNote = note + 12;
+                    else
+                        printNote = note;
+                    
+                    if(isFlat === true)
+                        noteToChar = getFlat(printNote);
+                    else
+                        noteToChar = getSharp(printNote);
+                    
+                    debugText = noteToChar + octave;
+                    
                 }
                 
 //                if(octave>=0 && octave<9)
@@ -216,10 +283,10 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
                 
                 note %= 12;
             }
-            offsetColumn = !offsetColumn;
+            offset = !offset;
             
             octave = ocv;
-            if(!offsetColumn)
+            if(!offset)
             {
                 var oldNoteB = note;
                 note += B;
@@ -280,7 +347,7 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 };
 
 // Draw hexgons in verticle direction
-HexagonGrid.prototype.drawHexVerticle = function(x0, y0, fillColor, debugText,bias, note) {
+HexagonGrid.prototype.drawHexVerticle = function(x0, y0, fillColor, debugText, bias, note) {
     var angle = Math.PI/3;
     var increment = Math.PI/3;
     
@@ -295,7 +362,7 @@ HexagonGrid.prototype.drawHexVerticle = function(x0, y0, fillColor, debugText,bi
     this.context.closePath();
     this.context.stroke();
     
-        if(note %  12 === bias) //tonic
+        if(note %  12 === bias||(note % 12 === (bias - 12 )&&(bias>0)) || (note % 12 === (bias + 12) && (bias<0))) //tonic
             this.context.fillStyle = "#F00";
         else if ( (note % 12 === 1) || (note % 12 === 3) || (note % 12 === 6) || (note % 12 === 8) || (note % 12 === 10) || (note % 12 === -2) || (note % 12 === -4) || (note % 12 === -6) || (note % 12 === -9) || (note % 12 === -11))  // black keys
             this.context.fillStyle = "#060"
@@ -305,7 +372,7 @@ HexagonGrid.prototype.drawHexVerticle = function(x0, y0, fillColor, debugText,bi
     
     if (debugText)
     {
-        this.context.font = "8px";
+        this.context.font = "8px Arial";
         this.context.fillStyle = "#000";
         this.context.fillText(debugText, x0, y0);
     } 
@@ -330,7 +397,7 @@ HexagonGrid.prototype.drawHexHorizontal = function(x0, y0, fillColor, debugText,
 
     
     
-        if(note %  12 === bias) //tonic
+        if(note %  12 === bias||(note % 12 === (bias - 12 )&&(bias>0)) || (note % 12 === (bias + 12) && (bias<0))) //tonic
             this.context.fillStyle = "#F00";
         else if ( (note % 12 === 1) || (note % 12 === 3) || (note % 12 === 6) || (note % 12 === 8) || (note % 12 === 10) || (note % 12 === -2) || (note % 12 === -4) || (note % 12 === -6) || (note % 12 === -9) || (note % 12 === -11))  // black keys
             this.context.fillStyle = "#060"
@@ -342,9 +409,10 @@ HexagonGrid.prototype.drawHexHorizontal = function(x0, y0, fillColor, debugText,
     
     if (debugText)
     {
+        
         // font of text
 //        if(this.radius >= 40)
-        this.context.font = "8px";
+        this.context.font = "8px Arial";
         // color of text
         this.context.fillStyle = "#000";
         // position of text
