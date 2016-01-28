@@ -168,10 +168,10 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, isDebug, isFlat) {
                     if(oldNoteB >= 0 && newNoteB < 0)
                     octave--;
                 
-                    if(note < -12 &&(newNoteB-oldNoteB)<0)
+                    if(note < -12)
                     octave--;             
             }                
-                
+                note += 12;
                 note %= 12;
             }
             offset = !offset;
